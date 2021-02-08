@@ -1,0 +1,139 @@
+﻿@model PowerCustomerReader.Models.ViewModels.StatsViewModel
+@{
+    ViewData["Title"] = "Statistikk";
+}
+
+@if (Model.organisationStats != null)
+{
+    <div class="container justify-content-center">
+        <div class="row justify-content-center">
+            <div class="row">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">ENK</th>
+                            <th scope="col">ANDRE</th>
+                            <th scope="col">AS 0-4 ansatte</th>
+                            <th scope="col">AS 5-10 ansatte</th>
+                            <th scope="col">AS >10 ansatte</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Antall</th>
+                            <td>@Model.organisationStats.ENK</td>
+                            <td>@Model.organisationStats.ANDRE</td>
+                            <td>@Model.organisationStats.AS_ZeroToFour</td>
+                            <td>@Model.organisationStats.AS_FiveToTen</td>
+                            <td>@Model.organisationStats.AS_OverTen</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Prosent</th>
+                            <td>@Model.organisationStats.ProsENK %</td>
+                            <td>@Model.organisationStats.ProsANDRE %</td>
+                            <td>@Model.organisationStats.Pros_AS_ZeroToFour %</td>
+                            <td>@Model.organisationStats.Pros_AS_FiveToTen %</td>
+                            <td>@Model.organisationStats.Pros_AS_OverTen %</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="container justify-content-center">
+        <div class="row pt-4 justify-content-md-center">
+            <div class="col">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+        <div class="row justify-content-center pt-4">
+            <div class="col-md-auto">
+                <button class="btn btn-primary p-2" id="changeToBar" type="button">Bar</button>
+            </div>
+            <div class="col-md-auto">
+                <button class="btn btn-primary p-2" id="changeToSmult" type="button">Smultring</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script type="text/javascript">
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'doughnut',
+
+        // The data for our dataset
+        data: {
+            labels: ['ENK', 'ANDRE', 'AS 0-4 ansatte', 'AS 5-10 ansatte', 'AS >10 ansatte'],
+            datasets: [{
+                label: 'Fordelingen av organisasjonsform/antall ansatte',
+                backgroundColor: ["#FFCA3E", "#FF6F50", "#D03454", "#9C2162", "#772F67"],
+                data: [@Model.organisationStats.ENK, @Model.organisationStats.ANDRE, @Model.organisationStats.AS_ZeroToFour, @Model.organisationStats.AS_FiveToTen, @Model.organisationStats.AS_OverTen]
+            }]
+        },
+
+        // Configuration options go here
+        options: {}
+    });
+
+    document.getElementById('changeToBar').onclick = function () {
+        chart.destroy();
+        chart = new Chart(ctx, {
+            type: 'bar',
+
+        // The data for our dataset
+        data: {
+            labels: ['ENK', 'ANDRE', 'AS 0-4 ansatte', 'AS 5-10 ansatte', 'AS >10 ansatte'],
+            datasets: [{
+                label: 'Fordelingen av organisasjonsform/antall ansatte',
+                backgroundColor: ["#FFCA3E", "#FF6F50", "#D03454", "#9C2162", "#772F67"],
+                data: [@Model.organisationStats.ENK, @Model.organisationStats.ANDRE, @Model.organisationStats.AS_ZeroToFour, @Model.organisationStats.AS_FiveToTen, @Model.organisationStats.AS_OverTen]
+            }]
+        },
+
+        // Configuration options go here
+        options: {}
+        });
+    };
+
+      document.getElementById('changeToSmult').onclick = function () {
+        chart.destroy();
+        chart = new Chart(ctx, {
+            type: 'doughnut',
+
+        // The data for our dataset
+        data: {
+            labels: ['ENK', 'ANDRE', 'AS 0-4 ansatte', 'AS 5-10 ansatte', 'AS >10 ansatte'],
+            datasets: [{
+                label: 'Fordelingen av organisasjonsform/antall ansatte',
+                backgroundColor: ["#FFCA3E", "#FF6F50", "#D03454", "#9C2162", "#772F67"],
+                data: [@Model.organisationStats.ENK, @Model.organisationStats.ANDRE, @Model.organisationStats.AS_ZeroToFour, @Model.organisationStats.AS_FiveToTen, @Model.organisationStats.AS_OverTen]
+            }]
+        },
+
+        // Configuration options go here
+        options: {}
+        });
+    };
+    </script>
+
+}
+else
+{
+    <div class="container justify-content-center">
+        <div class="row pt-4 justify-content-md-center">
+            <div class="col">
+                <p>Ingen filer er lastet opp, last opp <a asp-area="" asp-controller="Home" asp-action="Index">her</a></p>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
